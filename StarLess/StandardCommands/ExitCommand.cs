@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StarLess
+namespace StarLess.StandardCommands
 {
     public class ExitCommand : Command
     {

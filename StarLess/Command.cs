@@ -1,57 +1,44 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using StarLess.Exceptions;
 
 namespace StarLess
 {
     // TODO : Check if an argument appears twice
     // TODO : Check if an argument is a mistake
-    // TODO : Handle unlimited arguments
-    public abstract class Command
+    public abstract class Command : AbstractCommand
     {
-        public string Keyword { get; set; }
-        public string Description { get; set; }
-
-        public ArgumentsDescriptions RequiredArguments { get; set; }
-        public ArgumentsDescriptions OptionalArguments { get; set; }
-        public OptionsDescriptions Options { get; set; }
-        public bool UnlimitedArguments { get; set; }
+        public ArgumentsList RequiredArguments { get; private set; }
+        public ArgumentsList OptionalArguments { get; private set; }
 
         protected Command(string keyword, string description)
+            : base(keyword, description)
         {
-            Keyword = keyword;
-            Description = description;
-            RequiredArguments = new ArgumentsDescriptions();
-            OptionalArguments = new ArgumentsDescriptions();
-            Options = new OptionsDescriptions();
-            UnlimitedArguments = false;
+            RequiredArguments = new ArgumentsList();
+            OptionalArguments = new ArgumentsList();
         }
 
-        public void Run(string[] args)
+        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options)
         {
-            if (!UnlimitedArguments)
-            {
-                int argsCount = 0;
-                for (int i = 0; i < args.Length; i++)
-                {
-                    if (Options[args[i]].HasValue)
-                    {
-                        i += Options[args[i]].Value.Arguments.Count;
-                        continue;
-                    }
+            arguments = new ArgumentsValues();
+            options = new OptionsValues();
 
-                    argsCount++;
+            int argsCount = 0;
+            for (int i = 0; i < args.Length; i++)
+            {
+                if (Options[args[i]].HasValue)
+                {
+                    i += Options[args[i]].Value.Arguments.Count;
+                    continue;
                 }
 
-                if (argsCount < RequiredArguments.Count)
-                    throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count);
-
-                if (argsCount > RequiredArguments.Count + OptionalArguments.Count)
-                    throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count + OptionalArguments.Count);
+                argsCount++;
             }
 
-            ArgumentsValues arguments = new ArgumentsValues();
-            OptionsValues options = new OptionsValues();
+            if (argsCount < RequiredArguments.Count)
+                throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count);
+
+            if (argsCount > RequiredArguments.Count + OptionalArguments.Count)
+                throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count + OptionalArguments.Count);
 
             int j = 0;
             int k = 0;
@@ -75,79 +62,70 @@ namespace StarLess
                     continue;
                 }
 
-                if (UnlimitedArguments)
+                if (j < RequiredArguments.Count)
                 {
-                    arguments.Add(j.ToString(), args[i]);
+                    if (!RequiredArguments[j].isValid(args[i]))
+                        throw new ArgumentNotValidException(RequiredArguments[j], j);
+
+                    arguments.Add(RequiredArguments[j].Name, args[i]);
                     j++;
                 }
                 else
                 {
-                    if (j < RequiredArguments.Count)
-                    {
-                        if (!RequiredArguments[j].isValid(args[i]))
-                            throw new ArgumentNotValidException(RequiredArguments[j], j);
+                    if (!OptionalArguments[k].isValid(args[i]))
+                        throw new ArgumentNotValidException(OptionalArguments[k], j + k);
 
-                        arguments.Add(RequiredArguments[j].Name, args[i]);
-                        j++;
-                    }
-                    else
-                    {
-                        if (!OptionalArguments[k].isValid(args[i]))
-                            throw new ArgumentNotValidException(OptionalArguments[k], j + k);
-
-                        arguments.Add(OptionalArguments[k].Name, args[i]);
-                        k++;
-                    }
+                    arguments.Add(OptionalArguments[k].Name, args[i]);
+                    k++;
                 }
             }
-
-            Action(arguments, options);
         }
 
-        protected abstract void Action(ArgumentsValues arguments, OptionsValues options);
-
-        public class ArgumentsDescriptions : List<Argument>
+        public override sealed string CompleteDescription()
         {
-        }
+            string description = Keyword;
 
-        public class OptionsDescriptions : List<Option>
-        {
-            public Option? this[string key]
+            foreach (Argument a in RequiredArguments)
+                description += " " + a.Name;
+
+            if (OptionalArguments.Any())
             {
-                get
-                {
-                    if (key.Length >= 2 && key.ElementAt(0) == '-')
-                    {
-                        string s;
-                        if (key.Length >= 3 && key.ElementAt(1) == '-')
-                        {
-                            s = key.Substring(2);
-                            if (Exists(o => o.LongKey == s))
-                                return Find(o => o.LongKey == s);
-                            else
-                                return null;
-                        }
-                        else
-                        {
-                            s = key.Substring(1);
-                            if (Exists(o => o.ShortKey == s))
-                                return Find(o => o.ShortKey == s);
-                            else
-                                return null;
-                        }
-                    }
-                    else
-                        return null;
-                }
+                description += " (";
+                foreach (Argument a in OptionalArguments)
+                    description += " " + a.Name;
+                description += " )";
             }
-        }
 
-        protected class ArgumentsValues : Dictionary<string, string>
-        {
-        }
+            if (Options.Any())
+            {
+                description += " -[";
+                foreach (Option o in Options)
+                    description += " " + o.ShortKey;
+                description += " ]";
+            }
 
-        protected class OptionsValues : Dictionary<string, ArgumentsValues>
-        {
+            description += "\n\nDESCRIPTION : \n";
+            description += "\t" + Description + "\n";
+
+            if (RequiredArguments.Any())
+                description += "\nARGUMENTS :\n";
+
+            foreach (Argument a in RequiredArguments)
+                description += "\t" + a.Name + " : " + a.Description + "\n";
+
+            if (OptionalArguments.Any())
+                description += "\nOPTIONAL ARGUMENTS :\n";
+
+            foreach (Argument a in OptionalArguments)
+                description += "\t" + a.Name + " : " + a.Description + "\n";
+
+            if (Options.Any())
+                description += "\nOPTIONS :\n";
+
+            foreach (Option o in Options)
+                description += "\t-" + o.ShortKey + "/--" + o.LongKey + " : " + o.Description + "\n";
+
+            return description;
         }
     }
 }

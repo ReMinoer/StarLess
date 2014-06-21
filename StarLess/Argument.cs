@@ -30,7 +30,7 @@
             bool coma = false;
             foreach (Validator v in Validators)
             {
-                result += (coma ? ", " : "") + v.MessageIfUnvalid;
+                result += (coma ? ", " : "") + v.UnvalidMessage;
                 coma = true;
             }
             return result;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StarLess.Exceptions;
+using StarLess.StandardCommands;
 
 namespace StarLess
 {
@@ -10,7 +11,7 @@ namespace StarLess
         public string Name { get; set; }
         public string WelcomeMessage { get; set; }
 
-        private Dictionary<string, Command> Commands { get; set; }
+        private Dictionary<string, ICommand> Commands { get; set; }
 
         private static string exitKeyword = "exit";
         private static string helpKeyword = "help";
@@ -21,12 +22,12 @@ namespace StarLess
 
             WelcomeMessage = "Welcome in " + name + " !";
 
-            Commands = new Dictionary<string, Command>();
-            Commands.Add(exitKeyword, new ExitCommand(name));
+            Commands = new Dictionary<string, ICommand>();
+            Commands.Add(exitKeyword, new ExitCommand(Name));
             Commands.Add(helpKeyword, new HelpCommand(Commands));
         }
 
-        protected void AddCommand(Command c)
+        protected void AddCommand(ICommand c)
         {
             Commands.Add(c.Keyword, c);
         }
