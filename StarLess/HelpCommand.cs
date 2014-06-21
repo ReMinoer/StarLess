@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Diese.ConsoleInterface
+namespace StarLess
 {
     public class HelpCommand : Command
     {

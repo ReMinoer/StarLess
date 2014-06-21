@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Diese.ConsoleInterface.Exceptions;
+using StarLess.Exceptions;
 
-namespace Diese.ConsoleInterface
+namespace StarLess
 {
     public abstract class ConsoleInterface
     {

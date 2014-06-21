@@ -1,4 +1,4 @@
-﻿namespace Diese.ConsoleInterface.Exceptions
+﻿namespace StarLess.Exceptions
 {
     public class ArgumentNotValidException : ConsoleInterfaceException
     {

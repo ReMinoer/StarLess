@@ -1,4 +1,4 @@
-﻿namespace Diese.ConsoleInterface
+﻿namespace StarLess
 {
     public struct Argument
     {

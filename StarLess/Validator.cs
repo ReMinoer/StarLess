@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Diese.ConsoleInterface
+namespace StarLess
 {
     public struct Validator
     {
