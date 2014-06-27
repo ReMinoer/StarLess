@@ -3,9 +3,6 @@ using StarLess.Exceptions;
 
 namespace StarLess
 {
-    // TODO : Check if an argument appears twice
-    // TODO : Check if an argument is a mistake
-    // TODO : Handle unlimited arguments
     public abstract class UnlimitedCommand : AbstractCommand
     {
         protected string _parameterName = "query";

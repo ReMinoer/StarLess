@@ -35,9 +35,12 @@ namespace StarLess
         public void Run()
         {
             Console.WriteLine(WelcomeMessage);
+            Initialize();
             while (true)
                 WaitRequest();
         }
+
+        protected abstract void Initialize();
 
         private void WaitRequest()
         {
@@ -63,7 +66,7 @@ namespace StarLess
 
                 Commands[request.Command].Run(request.Arguments);
             }
-            catch (ConsoleInterfaceException e)
+            catch (Exception e)
             {
                 Console.WriteLine(e.Message);
             }
