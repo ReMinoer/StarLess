@@ -11,7 +11,7 @@ namespace StarLess
         public string Name { get; set; }
         public string WelcomeMessage { get; set; }
 
-        private Dictionary<string, ICommand> Commands { get; set; }
+        public Dictionary<string, ICommand> Commands { get; set; }
 
         private static string exitKeyword = "exit";
         private static string helpKeyword = "help";
@@ -49,8 +49,9 @@ namespace StarLess
             Request(new Request(Console.ReadLine()));
         }
 
-        public void Request(string[] args)
+        public void Request(params string[] args)
         {
+            Initialize();
             Request(new Request(args));
         }
 

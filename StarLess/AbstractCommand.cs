@@ -18,7 +18,7 @@ namespace StarLess
             Options = new OptionsList();
         }
 
-        public void Run(string[] args)
+        public void Run(params string[] args)
         {
             ArgumentsValues arguments;
             OptionsValues options;

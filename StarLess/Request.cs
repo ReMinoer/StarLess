@@ -5,7 +5,7 @@
         public string Command { get; set; }
         public string[] Arguments { get; set; }
 
-        public Request(string[] args)
+        public Request(params string[] args)
             : this()
         {
             if (args.Length == 0)

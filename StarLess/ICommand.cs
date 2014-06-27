@@ -5,7 +5,7 @@
         string Keyword { get; }
         string Description { get; }
 
-        void Run(string[] args);
+        void Run(params string[] args);
 
         string CompleteDescription();
     }
