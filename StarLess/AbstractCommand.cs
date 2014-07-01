@@ -73,6 +73,7 @@ namespace StarLess
         protected class ArgumentsValues : Dictionary<string, string>
         {
             private List<Argument> _arguments;
+
             public ArgumentsValues(List<Argument> arguments)
             {
                 _arguments = arguments;
