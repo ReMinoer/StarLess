@@ -3,6 +3,7 @@ using System.ComponentModel;
 
 namespace StarLess
 {
+    // TODO : others default validator
     public struct Validator
     {
         public Func<string, bool> Test { get; set; }

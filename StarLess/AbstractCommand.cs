@@ -10,7 +10,7 @@ namespace StarLess
         public ArgumentsList Arguments { get; private set; }
         public OptionsList Options { get; private set; }
 
-        protected AbstractCommand(string keyword, string description)
+        protected internal AbstractCommand(string keyword, string description)
         {
             Keyword = keyword;
             Description = description;
