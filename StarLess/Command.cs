@@ -10,6 +10,17 @@ namespace StarLess
         public ArgumentsList RequiredArguments { get; private set; }
         public ArgumentsList OptionalArguments { get; private set; }
 
+        public override sealed ArgumentsList Arguments
+        {
+            get
+            {
+                ArgumentsList result = new ArgumentsList();
+                result.AddRange(RequiredArguments);
+                result.AddRange(OptionalArguments);
+                return result;
+            }
+        }
+
         protected Command(string keyword, string description)
             : base(keyword, description)
         {
@@ -19,7 +30,7 @@ namespace StarLess
 
         protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options)
         {
-            arguments = new ArgumentsValues();
+            arguments = new ArgumentsValues(Arguments);
             options = new OptionsValues();
 
             int argsCount = 0;
@@ -48,7 +59,7 @@ namespace StarLess
                 {
                     Option o = Options[args[i]].Value;
 
-                    ArgumentsValues optionArgs = new ArgumentsValues();
+                    ArgumentsValues optionArgs = new ArgumentsValues(o.Arguments);
                     for (int x = 0; x < o.Arguments.Count; x++)
                     {
                         i++;

@@ -5,7 +5,16 @@ namespace StarLess
 {
     public abstract class UnlimitedCommand : AbstractCommand
     {
-        protected string _parameterName = "query";
+        public override sealed ArgumentsList Arguments
+        {
+            get
+            {
+                ArgumentsList result = new ArgumentsList();
+                result.Add(Argument);
+                return result;
+            }
+        }
+        protected Argument Argument;
 
         public UnlimitedCommand(string keyword, string description)
             : base(keyword, description)
@@ -14,7 +23,7 @@ namespace StarLess
 
         protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options)
         {
-            arguments = new ArgumentsValues();
+            arguments = new ArgumentsValues(Arguments);
             options = new OptionsValues();
 
             int j = 0;
@@ -24,7 +33,7 @@ namespace StarLess
                 {
                     Option o = Options[args[i]].Value;
 
-                    ArgumentsValues optionArgs = new ArgumentsValues();
+                    ArgumentsValues optionArgs = new ArgumentsValues(o.Arguments);
                     for (int x = 0; x < o.Arguments.Count; x++)
                     {
                         i++;
@@ -47,7 +56,7 @@ namespace StarLess
         {
             string description = Keyword;
 
-            description += " " + _parameterName + " ...";
+            description += " " + Argument.Name + "...";
 
             if (Options.Any())
             {

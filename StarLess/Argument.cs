@@ -1,17 +1,25 @@
-﻿namespace StarLess
+﻿using System;
+using System.Collections.Generic;
+
+namespace StarLess
 {
     public struct Argument
     {
         public string Name { get; set; }
+        public Type Type { get; set; }
         public string Description { get; set; }
-        public Validator[] Validators { get; set; }
+        public List<Validator> Validators { get; set; }
 
-        public Argument(string name, string description, params Validator[] validators)
+        public Argument(string name, Type type, string description, params Validator[] validators)
             : this()
         {
             Name = name;
+            Type = type;
             Description = description;
-            Validators = validators;
+
+            Validators = new List<Validator>();
+            Validators.Add(Validator.TryParse(name, type));
+            Validators.AddRange(validators);
         }
 
         public bool isValid(string s)

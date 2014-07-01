@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace StarLess
@@ -7,14 +8,13 @@ namespace StarLess
     {
         public string Keyword { get; private set; }
         public string Description { get; private set; }
-        public ArgumentsList Arguments { get; private set; }
+        public abstract ArgumentsList Arguments { get; }
         public OptionsList Options { get; private set; }
 
         protected internal AbstractCommand(string keyword, string description)
         {
             Keyword = keyword;
             Description = description;
-            Arguments = new ArgumentsList();
             Options = new OptionsList();
         }
 
@@ -72,6 +72,21 @@ namespace StarLess
 
         protected class ArgumentsValues : Dictionary<string, string>
         {
+            private List<Argument> _arguments;
+            public ArgumentsValues(List<Argument> arguments)
+            {
+                _arguments = arguments;
+            }
+
+            new public object this[string key]
+            {
+                get
+                {
+                    string stringValue;
+                    TryGetValue(key, out stringValue);
+                    return TypeDescriptor.GetConverter(_arguments.First(a => a.Name == key).Type).ConvertFromString(stringValue);
+                }
+            }
         }
 
         protected class OptionsValues : Dictionary<string, ArgumentsValues>
