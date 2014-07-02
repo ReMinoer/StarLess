@@ -3,7 +3,7 @@ using StarLess.Exceptions;
 
 namespace StarLess
 {
-    // TODO : Check if an argument appears twice
+    // TODO : Check if an optional argument appears twice
     // TODO : Check if an argument is a mistake
     public abstract class Command : AbstractCommand
     {
