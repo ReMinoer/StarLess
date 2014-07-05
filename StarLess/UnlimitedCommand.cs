@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Globalization;
+using System.Linq;
 using StarLess.Exceptions;
 
 namespace StarLess
@@ -9,14 +10,13 @@ namespace StarLess
         {
             get
             {
-                ArgumentsList result = new ArgumentsList();
-                result.Add(Argument);
+                var result = new ArgumentsList {Argument};
                 return result;
             }
         }
         protected Argument Argument;
 
-        public UnlimitedCommand(string keyword, string description)
+        protected UnlimitedCommand(string keyword, string description)
             : base(keyword, description)
         {
         }
@@ -26,19 +26,19 @@ namespace StarLess
             arguments = new ArgumentsValues(Arguments);
             options = new OptionsValues();
 
-            int j = 0;
-            for (int i = 0; i < args.Length; i++)
+            var j = 0;
+            for (var i = 0; i < args.Length; i++)
             {
                 if (Options[args[i]].HasValue)
                 {
-                    Option o = Options[args[i]].Value;
+                    var o = Options[args[i]].Value;
 
-                    ArgumentsValues optionArgs = new ArgumentsValues(o.Arguments);
-                    for (int x = 0; x < o.Arguments.Count; x++)
+                    var optionArgs = new ArgumentsValues(o.Arguments);
+                    foreach (var argument in o.Arguments)
                     {
                         i++;
-                        Argument a = o.Arguments[x];
-                        if (!a.isValid(args[i]))
+                        var a = argument;
+                        if (!a.IsValid(args[i]))
                             throw new ArgumentNotValidException(a, j);
 
                         optionArgs.Add(a.Name, args[i]);
@@ -47,21 +47,21 @@ namespace StarLess
                     continue;
                 }
 
-                arguments.Add(j.ToString(), args[i]);
+                arguments.Add(j.ToString(CultureInfo.InvariantCulture), args[i]);
                 j++;
             }
         }
 
         public override sealed string CompleteDescription()
         {
-            string description = Keyword;
+            var description = Keyword;
 
             description += " " + Argument.Name + "...";
 
             if (Options.Any())
             {
                 description += " -[";
-                foreach (Option o in Options)
+                foreach (var o in Options)
                     description += " " + o.ShortKey;
                 description += " ]";
             }
@@ -72,7 +72,7 @@ namespace StarLess
             if (Options.Any())
                 description += "\nOPTIONS :\n";
 
-            foreach (Option o in Options)
+            foreach (var o in Options)
                 description += "\t-" + o.ShortKey + "/--" + o.LongKey + " : " + o.Description + "\n";
 
             return description;

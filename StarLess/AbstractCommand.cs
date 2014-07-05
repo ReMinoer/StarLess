@@ -44,35 +44,26 @@ namespace StarLess
             {
                 get
                 {
-                    if (key.Length >= 2 && key.ElementAt(0) == '-')
+                    if (key.Length < 2 || key.ElementAt(0) != '-') return null;
+                    string s;
+                    if (key.Length >= 3 && key.ElementAt(1) == '-')
                     {
-                        string s;
-                        if (key.Length >= 3 && key.ElementAt(1) == '-')
-                        {
-                            s = key.Substring(2);
-                            if (Exists(o => o.LongKey == s))
-                                return Find(o => o.LongKey == s);
-                            else
-                                return null;
-                        }
-                        else
-                        {
-                            s = key.Substring(1);
-                            if (Exists(o => o.ShortKey == s))
-                                return Find(o => o.ShortKey == s);
-                            else
-                                return null;
-                        }
-                    }
-                    else
+                        s = key.Substring(2);
+                        if (Exists(o => o.LongKey == s))
+                            return Find(o => o.LongKey == s);
                         return null;
+                    }
+                    s = key.Substring(1);
+                    if (Exists(o => o.ShortKey == s))
+                        return Find(o => o.ShortKey == s);
+                    return null;
                 }
             }
         }
 
         protected class ArgumentsValues : Dictionary<string, string>
         {
-            private List<Argument> _arguments;
+            private readonly List<Argument> _arguments;
 
             public ArgumentsValues(List<Argument> arguments)
             {

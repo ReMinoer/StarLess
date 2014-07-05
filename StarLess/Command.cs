@@ -14,7 +14,7 @@ namespace StarLess
         {
             get
             {
-                ArgumentsList result = new ArgumentsList();
+                var result = new ArgumentsList();
                 result.AddRange(RequiredArguments);
                 result.AddRange(OptionalArguments);
                 return result;
@@ -33,8 +33,8 @@ namespace StarLess
             arguments = new ArgumentsValues(Arguments);
             options = new OptionsValues();
 
-            int argsCount = 0;
-            for (int i = 0; i < args.Length; i++)
+            var argsCount = 0;
+            for (var i = 0; i < args.Length; i++)
             {
                 if (Options[args[i]].HasValue)
                 {
@@ -51,20 +51,20 @@ namespace StarLess
             if (argsCount > RequiredArguments.Count + OptionalArguments.Count)
                 throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count + OptionalArguments.Count);
 
-            int j = 0;
-            int k = 0;
-            for (int i = 0; i < args.Length; i++)
+            var j = 0;
+            var k = 0;
+            for (var i = 0; i < args.Length; i++)
             {
                 if (Options[args[i]].HasValue)
                 {
-                    Option o = Options[args[i]].Value;
+                    var o = Options[args[i]].Value;
 
-                    ArgumentsValues optionArgs = new ArgumentsValues(o.Arguments);
-                    for (int x = 0; x < o.Arguments.Count; x++)
+                    var optionArgs = new ArgumentsValues(o.Arguments);
+                    foreach (var argument in o.Arguments)
                     {
                         i++;
-                        Argument a = o.Arguments[x];
-                        if (!a.isValid(args[i]))
+                        var a = argument;
+                        if (!a.IsValid(args[i]))
                             throw new ArgumentNotValidException(a, j);
 
                         optionArgs.Add(a.Name, args[i]);
@@ -75,7 +75,7 @@ namespace StarLess
 
                 if (j < RequiredArguments.Count)
                 {
-                    if (!RequiredArguments[j].isValid(args[i]))
+                    if (!RequiredArguments[j].IsValid(args[i]))
                         throw new ArgumentNotValidException(RequiredArguments[j], j);
 
                     arguments.Add(RequiredArguments[j].Name, args[i]);
@@ -83,7 +83,7 @@ namespace StarLess
                 }
                 else
                 {
-                    if (!OptionalArguments[k].isValid(args[i]))
+                    if (!OptionalArguments[k].IsValid(args[i]))
                         throw new ArgumentNotValidException(OptionalArguments[k], j + k);
 
                     arguments.Add(OptionalArguments[k].Name, args[i]);
@@ -94,15 +94,15 @@ namespace StarLess
 
         public override sealed string CompleteDescription()
         {
-            string description = Keyword;
+            var description = Keyword;
 
-            foreach (Argument a in RequiredArguments)
+            foreach (var a in RequiredArguments)
                 description += " " + a.Name;
 
             if (OptionalArguments.Any())
             {
                 description += " (";
-                foreach (Argument a in OptionalArguments)
+                foreach (var a in OptionalArguments)
                     description += " " + a.Name;
                 description += " )";
             }
@@ -110,7 +110,7 @@ namespace StarLess
             if (Options.Any())
             {
                 description += " -[";
-                foreach (Option o in Options)
+                foreach (var o in Options)
                     description += " " + o.ShortKey;
                 description += " ]";
             }
@@ -121,19 +121,19 @@ namespace StarLess
             if (RequiredArguments.Any())
                 description += "\nARGUMENTS :\n";
 
-            foreach (Argument a in RequiredArguments)
+            foreach (var a in RequiredArguments)
                 description += "\t" + a.Name + " : " + a.Description + "\n";
 
             if (OptionalArguments.Any())
                 description += "\nOPTIONAL ARGUMENTS :\n";
 
-            foreach (Argument a in OptionalArguments)
+            foreach (var a in OptionalArguments)
                 description += "\t" + a.Name + " : " + a.Description + "\n";
 
             if (Options.Any())
                 description += "\nOPTIONS :\n";
 
-            foreach (Option o in Options)
+            foreach (var o in Options)
                 description += "\t-" + o.ShortKey + "/--" + o.LongKey + " : " + o.Description + "\n";
 
             return description;

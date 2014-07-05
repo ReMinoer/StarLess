@@ -17,14 +17,22 @@ namespace StarLess
 
         public static Validator TryParse(string name, Type type)
         {
-            Validator v = new Validator();
-            v.Test = s =>
+            var v = new Validator
             {
-                try { TypeDescriptor.GetConverter(type).ConvertFromString(s); }
-                catch { return false; }
-                return true;
+                Test = s =>
+                {
+                    try
+                    {
+                        TypeDescriptor.GetConverter(type).ConvertFromString(s);
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                    return true;
+                },
+                UnvalidMessage = name + " is not a valid " + type.Name + " !"
             };
-            v.UnvalidMessage = name + " is not a valid " + type.Name + " !";
             return v;
         }
     }

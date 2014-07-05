@@ -12,9 +12,10 @@ namespace StarLess
         public string WelcomeMessage { get; set; }
 
         public Dictionary<string, ICommand> Commands { get; set; }
+        private bool _exit;
 
-        private static string exitKeyword = "exit";
-        private static string helpKeyword = "help";
+        private const string ExitKeyword = "exit";
+        private const string HelpKeyword = "help";
 
         protected ConsoleInterface(string name)
         {
@@ -22,9 +23,11 @@ namespace StarLess
 
             WelcomeMessage = "Welcome in " + name + " !";
 
-            Commands = new Dictionary<string, ICommand>();
-            Commands.Add(exitKeyword, new ExitCommand(Name));
-            Commands.Add(helpKeyword, new HelpCommand(Commands));
+            var exitCommand = new ExitCommand(Name);
+            exitCommand.ExitRequest += OnExitRequest;
+
+            Commands = new Dictionary<string, ICommand> {{ExitKeyword, exitCommand}};
+            Commands.Add(HelpKeyword, new HelpCommand(Commands));
         }
 
         protected void AddCommand(ICommand c)
@@ -36,7 +39,7 @@ namespace StarLess
         {
             Console.WriteLine(WelcomeMessage);
             Initialize();
-            while (true)
+            while (!_exit)
                 WaitRequest();
         }
 
@@ -71,6 +74,11 @@ namespace StarLess
             {
                 Console.WriteLine(e.Message);
             }
+        }
+
+        private void OnExitRequest(object sender, EventArgs args)
+        {
+            _exit = true;
         }
     }
 }

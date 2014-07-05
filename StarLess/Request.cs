@@ -18,13 +18,13 @@
                 Command = args[0];
 
                 Arguments = new string[args.Length - 1];
-                for (int i = 0; i < Arguments.Length; i++)
+                for (var i = 0; i < Arguments.Length; i++)
                     Arguments[i] = args[i + 1];
             }
         }
 
         public Request(string line)
-            : this(line.Split(new char[] { ' ' }))
+            : this(line.Split(new[] { ' ' }))
         {
         }
     }

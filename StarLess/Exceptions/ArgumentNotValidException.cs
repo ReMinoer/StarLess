@@ -4,6 +4,6 @@
     {
         public ArgumentNotValidException(Argument a, int idArg)
             : base("Unvalid value for argument n°" + idArg + "."
-                    + ((a.getUnvalidMessage() != "") ? " (" + a.getUnvalidMessage() + ")" : "")) { }
+                    + ((a.GetUnvalidMessage() != "") ? " (" + a.GetUnvalidMessage() + ")" : "")) { }
     }
 }

@@ -25,7 +25,7 @@ namespace StarLess.StandardCommands
             else
             {
                 Console.WriteLine();
-                foreach (ICommand c in Commands.Values)
+                foreach (var c in Commands.Values)
                 {
                     Console.Write("\t" + c.Keyword + " : " + c.Description);
                     Console.WriteLine();
