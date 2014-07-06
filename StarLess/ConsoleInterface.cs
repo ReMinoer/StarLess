@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using StarLess.Exceptions;
 using StarLess.StandardCommands;
@@ -8,9 +9,15 @@ namespace StarLess
 {
     public abstract class ConsoleInterface
     {
-        public string Name { get; set; }
-        public string WelcomeMessage { get; set; }
-        public Dictionary<string, ICommand> Commands { get; set; }
+        protected string Name { get; set; }
+        protected string WelcomeMessage { get; set; }
+
+        protected ReadOnlyDictionary<string, ICommand> Commands
+        {
+            get { return new ReadOnlyDictionary<string, ICommand>(_commands); }
+        }
+
+        private readonly Dictionary<string, ICommand> _commands;
 
         private bool _exit;
         private const string ExitKeyword = "exit";
@@ -25,13 +32,13 @@ namespace StarLess
             var exitCommand = new ExitCommand(Name);
             exitCommand.ExitRequest += OnExitRequest;
 
-            Commands = new Dictionary<string, ICommand> {{ExitKeyword, exitCommand}};
-            Commands.Add(HelpKeyword, new HelpCommand(Commands));
+            _commands = new Dictionary<string, ICommand> { { ExitKeyword, exitCommand } };
+            _commands.Add(HelpKeyword, new HelpCommand(_commands));
         }
 
         protected void AddCommand(ICommand c)
         {
-            Commands.Add(c.Keyword, c);
+            _commands.Add(c.Keyword, c);
         }
 
         public void Run()

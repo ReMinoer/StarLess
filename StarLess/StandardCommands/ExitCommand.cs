@@ -2,7 +2,7 @@
 
 namespace StarLess.StandardCommands
 {
-    public class ExitCommand : Command
+    internal class ExitCommand : Command
     {
         public ExitCommand(string applicationName)
             : base("exit", "Exit " + applicationName + ".") {}

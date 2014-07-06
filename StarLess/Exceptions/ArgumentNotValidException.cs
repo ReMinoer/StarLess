@@ -1,6 +1,6 @@
 ﻿namespace StarLess.Exceptions
 {
-    public class ArgumentNotValidException : ConsoleInterfaceException
+    internal class ArgumentNotValidException : ConsoleInterfaceException
     {
         public ArgumentNotValidException(Argument a, int idArg)
             : base(

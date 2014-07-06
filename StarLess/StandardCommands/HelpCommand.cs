@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace StarLess.StandardCommands
 {
-    public class HelpCommand : Command
+    internal class HelpCommand : Command
     {
         public Dictionary<string, ICommand> Commands { get; set; }
 

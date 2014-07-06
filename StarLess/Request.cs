@@ -1,9 +1,9 @@
 ﻿namespace StarLess
 {
-    struct Request
+    internal struct Request
     {
-        public string Command { get; set; }
-        public string[] Arguments { get; set; }
+        public string Command { get; private set; }
+        public string[] Arguments { get; private set; }
 
         public Request(params string[] args)
             : this()

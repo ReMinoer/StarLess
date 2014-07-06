@@ -1,6 +1,6 @@
 ﻿namespace StarLess.Exceptions
 {
-    public class NumberOfArgumentsException : ConsoleInterfaceException
+    internal class NumberOfArgumentsException : ConsoleInterfaceException
     {
         public NumberOfArgumentsException(int given, int need)
             : base(

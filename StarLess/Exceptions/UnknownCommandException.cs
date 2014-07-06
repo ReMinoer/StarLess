@@ -1,6 +1,6 @@
 ﻿namespace StarLess.Exceptions
 {
-    public class UnknownCommandException : ConsoleInterfaceException
+    internal class UnknownCommandException : ConsoleInterfaceException
     {
         public UnknownCommandException(string commandName)
             : base(string.Format("Unknown command : \"{0}\".", commandName)) {}
