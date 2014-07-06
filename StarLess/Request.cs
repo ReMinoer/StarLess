@@ -1,6 +1,6 @@
 ﻿namespace StarLess
 {
-    internal struct Request
+    struct Request
     {
         public string Command { get; set; }
         public string[] Arguments { get; set; }
@@ -18,14 +18,12 @@
                 Command = args[0];
 
                 Arguments = new string[args.Length - 1];
-                for (var i = 0; i < Arguments.Length; i++)
+                for (int i = 0; i < Arguments.Length; i++)
                     Arguments[i] = args[i + 1];
             }
         }
 
         public Request(string line)
-            : this(line.Split(new[] { ' ' }))
-        {
-        }
+            : this(line.Split(new[] {' '})) {}
     }
 }

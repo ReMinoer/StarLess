@@ -6,6 +6,7 @@ namespace StarLess
 {
     public abstract class UnlimitedCommand : AbstractCommand
     {
+        protected Argument Argument;
         public override sealed ArgumentsList Arguments
         {
             get
@@ -14,30 +15,28 @@ namespace StarLess
                 return result;
             }
         }
-        protected Argument Argument;
 
         protected UnlimitedCommand(string keyword, string description)
-            : base(keyword, description)
-        {
-        }
+            : base(keyword, description) {}
 
-        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options)
+        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
+                                                     out OptionsValues options)
         {
             arguments = new ArgumentsValues(Arguments);
             options = new OptionsValues();
 
-            var j = 0;
-            for (var i = 0; i < args.Length; i++)
+            int j = 0;
+            for (int i = 0; i < args.Length; i++)
             {
                 if (Options[args[i]].HasValue)
                 {
-                    var o = Options[args[i]].Value;
+                    Option o = Options[args[i]].Value;
 
                     var optionArgs = new ArgumentsValues(o.Arguments);
-                    foreach (var argument in o.Arguments)
+                    foreach (Argument argument in o.Arguments)
                     {
                         i++;
-                        var a = argument;
+                        Argument a = argument;
                         if (!a.IsValid(args[i]))
                             throw new ArgumentNotValidException(a, j);
 
@@ -54,14 +53,14 @@ namespace StarLess
 
         public override sealed string CompleteDescription()
         {
-            var description = Keyword;
+            string description = Keyword;
 
             description += " " + Argument.Name + "...";
 
             if (Options.Any())
             {
                 description += " -[";
-                foreach (var o in Options)
+                foreach (Option o in Options)
                     description += " " + o.ShortKey;
                 description += " ]";
             }
@@ -72,7 +71,7 @@ namespace StarLess
             if (Options.Any())
                 description += "\nOPTIONS :\n";
 
-            foreach (var o in Options)
+            foreach (Option o in Options)
                 description += "\t-" + o.ShortKey + "/--" + o.LongKey + " : " + o.Description + "\n";
 
             return description;

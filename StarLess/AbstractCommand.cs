@@ -28,15 +28,14 @@ namespace StarLess
             Action(arguments, options);
         }
 
-        protected abstract void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options);
+        public abstract string CompleteDescription();
+
+        protected abstract void CheckValidity(string[] args, out ArgumentsValues arguments,
+                                              out OptionsValues options);
 
         protected abstract void Action(ArgumentsValues arguments, OptionsValues options);
 
-        public abstract string CompleteDescription();
-
-        public class ArgumentsList : List<Argument>
-        {
-        }
+        public class ArgumentsList : List<Argument> {}
 
         public class OptionsList : List<Option>
         {
@@ -44,7 +43,9 @@ namespace StarLess
             {
                 get
                 {
-                    if (key.Length < 2 || key.ElementAt(0) != '-') return null;
+                    if (key.Length < 2 || key.ElementAt(0) != '-')
+                        return null;
+
                     string s;
                     if (key.Length >= 3 && key.ElementAt(1) == '-')
                     {
@@ -63,26 +64,25 @@ namespace StarLess
 
         protected class ArgumentsValues : Dictionary<string, string>
         {
-            private readonly List<Argument> _arguments;
-
-            public ArgumentsValues(List<Argument> arguments)
-            {
-                _arguments = arguments;
-            }
-
             new public object this[string key]
             {
                 get
                 {
                     string stringValue;
                     TryGetValue(key, out stringValue);
-                    return TypeDescriptor.GetConverter(_arguments.First(a => a.Name == key).Type).ConvertFromString(stringValue);
+                    return
+                        TypeDescriptor.GetConverter(_arguments.First(a => a.Name == key).Type).
+                                       ConvertFromString(stringValue);
                 }
+            }
+            private readonly List<Argument> _arguments;
+
+            public ArgumentsValues(List<Argument> arguments)
+            {
+                _arguments = arguments;
             }
         }
 
-        protected class OptionsValues : Dictionary<string, ArgumentsValues>
-        {
-        }
+        protected class OptionsValues : Dictionary<string, ArgumentsValues> {}
     }
 }

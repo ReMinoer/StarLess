@@ -28,13 +28,14 @@ namespace StarLess
             OptionalArguments = new ArgumentsList();
         }
 
-        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options)
+        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
+                                                     out OptionsValues options)
         {
             arguments = new ArgumentsValues(Arguments);
             options = new OptionsValues();
 
-            var argsCount = 0;
-            for (var i = 0; i < args.Length; i++)
+            int argsCount = 0;
+            for (int i = 0; i < args.Length; i++)
             {
                 if (Options[args[i]].HasValue)
                 {
@@ -49,21 +50,22 @@ namespace StarLess
                 throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count);
 
             if (argsCount > RequiredArguments.Count + OptionalArguments.Count)
-                throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count + OptionalArguments.Count);
+                throw new NumberOfArgumentsException(argsCount,
+                    RequiredArguments.Count + OptionalArguments.Count);
 
-            var j = 0;
-            var k = 0;
-            for (var i = 0; i < args.Length; i++)
+            int j = 0;
+            int k = 0;
+            for (int i = 0; i < args.Length; i++)
             {
                 if (Options[args[i]].HasValue)
                 {
-                    var o = Options[args[i]].Value;
+                    Option o = Options[args[i]].Value;
 
                     var optionArgs = new ArgumentsValues(o.Arguments);
-                    foreach (var argument in o.Arguments)
+                    foreach (Argument argument in o.Arguments)
                     {
                         i++;
-                        var a = argument;
+                        Argument a = argument;
                         if (!a.IsValid(args[i]))
                             throw new ArgumentNotValidException(a, j);
 
@@ -94,15 +96,15 @@ namespace StarLess
 
         public override sealed string CompleteDescription()
         {
-            var description = Keyword;
+            string description = Keyword;
 
-            foreach (var a in RequiredArguments)
+            foreach (Argument a in RequiredArguments)
                 description += " " + a.Name;
 
             if (OptionalArguments.Any())
             {
                 description += " (";
-                foreach (var a in OptionalArguments)
+                foreach (Argument a in OptionalArguments)
                     description += " " + a.Name;
                 description += " )";
             }
@@ -110,7 +112,7 @@ namespace StarLess
             if (Options.Any())
             {
                 description += " -[";
-                foreach (var o in Options)
+                foreach (Option o in Options)
                     description += " " + o.ShortKey;
                 description += " ]";
             }
@@ -121,19 +123,19 @@ namespace StarLess
             if (RequiredArguments.Any())
                 description += "\nARGUMENTS :\n";
 
-            foreach (var a in RequiredArguments)
+            foreach (Argument a in RequiredArguments)
                 description += "\t" + a.Name + " : " + a.Description + "\n";
 
             if (OptionalArguments.Any())
                 description += "\nOPTIONAL ARGUMENTS :\n";
 
-            foreach (var a in OptionalArguments)
+            foreach (Argument a in OptionalArguments)
                 description += "\t" + a.Name + " : " + a.Description + "\n";
 
             if (Options.Any())
                 description += "\nOPTIONS :\n";
 
-            foreach (var o in Options)
+            foreach (Option o in Options)
                 description += "\t-" + o.ShortKey + "/--" + o.LongKey + " : " + o.Description + "\n";
 
             return description;

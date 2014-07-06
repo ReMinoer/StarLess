@@ -1,10 +1,10 @@
-﻿namespace StarLess.Exceptions
+﻿using System;
+
+namespace StarLess.Exceptions
 {
-    public abstract class ConsoleInterfaceException : System.Exception
+    public abstract class ConsoleInterfaceException : Exception
     {
         protected ConsoleInterfaceException(string message)
-            : base(message)
-        {
-        }
+            : base(message) {}
     }
 }

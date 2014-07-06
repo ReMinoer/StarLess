@@ -3,7 +3,8 @@
     public class ArgumentNotValidException : ConsoleInterfaceException
     {
         public ArgumentNotValidException(Argument a, int idArg)
-            : base("Unvalid value for argument n°" + idArg + "."
-                    + ((a.GetUnvalidMessage() != "") ? " (" + a.GetUnvalidMessage() + ")" : "")) { }
+            : base(
+                string.Format("Unvalid value for argument n°{0}.{1}", idArg,
+                    ((a.GetUnvalidMessage() != "") ? " (" + a.GetUnvalidMessage() + ")" : ""))) {}
     }
 }

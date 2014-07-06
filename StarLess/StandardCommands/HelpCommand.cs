@@ -12,7 +12,8 @@ namespace StarLess.StandardCommands
         {
             Commands = commands;
 
-            OptionalArguments.Add(new Argument("command", typeof(string), "name of a command", new Validator(x => Commands.ContainsKey(x), "Unknown command")));
+            OptionalArguments.Add(new Argument("command", typeof(string), "name of a command",
+                new Validator(x => Commands.ContainsKey(x), "Unknown command")));
         }
 
         protected override void Action(ArgumentsValues arguments, OptionsValues options)
@@ -25,7 +26,7 @@ namespace StarLess.StandardCommands
             else
             {
                 Console.WriteLine();
-                foreach (var c in Commands.Values)
+                foreach (ICommand c in Commands.Values)
                 {
                     Console.Write("\t" + c.Keyword + " : " + c.Description);
                     Console.WriteLine();

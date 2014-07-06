@@ -23,20 +23,20 @@ namespace StarLess
 
         public bool IsValid(string s)
         {
-            if (s == null) throw new ArgumentNullException("s");
-            var result = true;
-            foreach (var v in Validators)
-            {
+            if (s == null)
+                throw new ArgumentNullException("s");
+
+            bool result = true;
+            foreach (Validator v in Validators)
                 result = result && v.Test.Invoke(s);
-            }
             return result;
         }
 
         public string GetUnvalidMessage()
         {
-            var result = "";
-            var coma = false;
-            foreach (var v in Validators)
+            string result = "";
+            bool coma = false;
+            foreach (Validator v in Validators)
             {
                 result += (coma ? ", " : "") + v.UnvalidMessage;
                 coma = true;

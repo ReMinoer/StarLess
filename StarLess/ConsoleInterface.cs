@@ -10,10 +10,9 @@ namespace StarLess
     {
         public string Name { get; set; }
         public string WelcomeMessage { get; set; }
-
         public Dictionary<string, ICommand> Commands { get; set; }
-        private bool _exit;
 
+        private bool _exit;
         private const string ExitKeyword = "exit";
         private const string HelpKeyword = "help";
 
