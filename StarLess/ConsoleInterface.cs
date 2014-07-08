@@ -32,7 +32,7 @@ namespace StarLess
             var exitCommand = new ExitCommand(Name);
             exitCommand.ExitRequest += OnExitRequest;
 
-            _commands = new Dictionary<string, ICommand> { { ExitKeyword, exitCommand } };
+            _commands = new Dictionary<string, ICommand> {{ExitKeyword, exitCommand}};
             _commands.Add(HelpKeyword, new HelpCommand(_commands));
         }
 

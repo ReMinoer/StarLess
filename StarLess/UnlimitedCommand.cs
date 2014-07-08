@@ -6,7 +6,6 @@ namespace StarLess
 {
     public abstract class UnlimitedCommand : AbstractCommand
     {
-        protected Argument Argument;
         public override sealed ArgumentsList Arguments
         {
             get
@@ -15,6 +14,7 @@ namespace StarLess
                 return result;
             }
         }
+        protected Argument Argument;
 
         protected UnlimitedCommand(string keyword, string description)
             : base(keyword, description) {}

@@ -6,17 +6,17 @@ namespace StarLess
 {
     public abstract class AbstractCommand : ICommand
     {
-        public string Keyword { get; private set; }
-        public string Description { get; private set; }
-        public abstract ArgumentsList Arguments { get; }
-        public OptionsList Options { get; private set; }
-
         protected internal AbstractCommand(string keyword, string description)
         {
             Keyword = keyword;
             Description = description;
             Options = new OptionsList();
         }
+
+        public string Keyword { get; private set; }
+        public string Description { get; private set; }
+        public abstract ArgumentsList Arguments { get; }
+        public OptionsList Options { get; private set; }
 
         public void Run(params string[] args)
         {
@@ -36,6 +36,27 @@ namespace StarLess
         protected abstract void Action(ArgumentsValues arguments, OptionsValues options);
 
         public class ArgumentsList : List<Argument> {}
+
+        protected class ArgumentsValues : Dictionary<string, string>
+        {
+            new public object this[string key]
+            {
+                get
+                {
+                    string stringValue;
+                    TryGetValue(key, out stringValue);
+                    return
+                        TypeDescriptor.GetConverter(_arguments.First(a => a.Name == key).Type).
+                                       ConvertFromString(stringValue);
+                }
+            }
+            private readonly List<Argument> _arguments;
+
+            public ArgumentsValues(List<Argument> arguments)
+            {
+                _arguments = arguments;
+            }
+        }
 
         public class OptionsList : List<Option>
         {
@@ -59,27 +80,6 @@ namespace StarLess
                         return Find(o => o.ShortKey == s);
                     return null;
                 }
-            }
-        }
-
-        protected class ArgumentsValues : Dictionary<string, string>
-        {
-            new public object this[string key]
-            {
-                get
-                {
-                    string stringValue;
-                    TryGetValue(key, out stringValue);
-                    return
-                        TypeDescriptor.GetConverter(_arguments.First(a => a.Name == key).Type).
-                                       ConvertFromString(stringValue);
-                }
-            }
-            private readonly List<Argument> _arguments;
-
-            public ArgumentsValues(List<Argument> arguments)
-            {
-                _arguments = arguments;
             }
         }
 
