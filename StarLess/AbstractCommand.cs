@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 
@@ -33,30 +34,28 @@ namespace StarLess
         protected abstract void CheckValidity(string[] args, out ArgumentsValues arguments,
                                               out OptionsValues options);
 
-        protected abstract void Action(ArgumentsValues arguments, OptionsValues options);
+        protected abstract void Action(ArgumentsValues args, OptionsValues options);
+
+        protected class ArgumentsDictionary : Dictionary<string, string> {}
 
         public class ArgumentsList : List<Argument> {}
 
-        protected class ArgumentsValues : Dictionary<string, string>
+        protected class ArgumentsValues : ReadOnlyDictionary<string, string>
         {
-            new public object this[string key]
-            {
-                get
-                {
-                    string stringValue;
-                    TryGetValue(key, out stringValue);
-                    return
-                        TypeDescriptor.GetConverter(_arguments.First(a => a.Name == key).Type).
-                                       ConvertFromString(stringValue);
-                }
-            }
-            private readonly List<Argument> _arguments;
+            public ArgumentsValues(IDictionary<string, string> dictionary)
+                : base(dictionary) {}
 
-            public ArgumentsValues(List<Argument> arguments)
+            public T Value<T>(string parameterName)
             {
-                _arguments = arguments;
+                string stringValue;
+                if (!TryGetValue(parameterName, out stringValue))
+                    throw new KeyNotFoundException();
+
+                return (T)TypeDescriptor.GetConverter(typeof(T)).ConvertFromString(stringValue);
             }
         }
+
+        protected class OptionsDictionary : Dictionary<string, ArgumentsDictionary> {}
 
         public class OptionsList : List<Option>
         {
@@ -83,6 +82,10 @@ namespace StarLess
             }
         }
 
-        protected class OptionsValues : Dictionary<string, ArgumentsValues> {}
+        protected class OptionsValues : ReadOnlyDictionary<string, ArgumentsDictionary>
+        {
+            public OptionsValues(IDictionary<string, ArgumentsDictionary> dictionary)
+                : base(dictionary) {}
+        }
     }
 }

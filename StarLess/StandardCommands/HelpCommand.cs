@@ -16,12 +16,12 @@ namespace StarLess.StandardCommands
                 new Validator(x => Commands.ContainsKey(x), "Unknown command")));
         }
 
-        protected override void Action(ArgumentsValues arguments, OptionsValues options)
+        protected override void Action(ArgumentsValues args, OptionsValues options)
         {
-            if (arguments.ContainsKey("command"))
+            if (args.ContainsKey("command"))
             {
                 Console.WriteLine();
-                Console.Write(Commands[(string)arguments["command"]].CompleteDescription());
+                Console.Write(Commands[args.Value<string>("command")].CompleteDescription());
             }
             else
             {

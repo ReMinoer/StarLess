@@ -9,7 +9,7 @@ namespace StarLess.StandardCommands
 
         public event EventHandler ExitRequest;
 
-        protected override void Action(ArgumentsValues arguments, OptionsValues options)
+        protected override void Action(ArgumentsValues args, OptionsValues options)
         {
             ExitRequest(this, new EventArgs());
         }

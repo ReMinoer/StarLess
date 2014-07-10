@@ -31,8 +31,8 @@ namespace StarLess
         protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
                                                      out OptionsValues options)
         {
-            arguments = new ArgumentsValues(Arguments);
-            options = new OptionsValues();
+            var argumentsDictionary = new ArgumentsDictionary();
+            var optionsDictionary = new OptionsDictionary();
 
             int argsCount = 0;
             for (int i = 0; i < args.Length; i++)
@@ -61,7 +61,7 @@ namespace StarLess
                 {
                     Option o = Options[args[i]].Value;
 
-                    var optionArgs = new ArgumentsValues(o.Arguments);
+                    var optionArgs = new ArgumentsDictionary();
                     foreach (Argument argument in o.Arguments)
                     {
                         i++;
@@ -71,7 +71,7 @@ namespace StarLess
 
                         optionArgs.Add(a.Name, args[i]);
                     }
-                    options.Add(o.ShortKey, optionArgs);
+                    optionsDictionary.Add(o.ShortKey, optionArgs);
                     continue;
                 }
 
@@ -80,7 +80,7 @@ namespace StarLess
                     if (!RequiredArguments[j].IsValid(args[i]))
                         throw new ArgumentNotValidException(RequiredArguments[j], j);
 
-                    arguments.Add(RequiredArguments[j].Name, args[i]);
+                    argumentsDictionary.Add(RequiredArguments[j].Name, args[i]);
                     j++;
                 }
                 else
@@ -88,10 +88,13 @@ namespace StarLess
                     if (!OptionalArguments[k].IsValid(args[i]))
                         throw new ArgumentNotValidException(OptionalArguments[k], j + k);
 
-                    arguments.Add(OptionalArguments[k].Name, args[i]);
+                    argumentsDictionary.Add(OptionalArguments[k].Name, args[i]);
                     k++;
                 }
             }
+
+            arguments = new ArgumentsValues(argumentsDictionary);
+            options = new OptionsValues(optionsDictionary);
         }
 
         public override sealed string CompleteDescription()

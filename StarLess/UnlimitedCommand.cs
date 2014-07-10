@@ -22,8 +22,8 @@ namespace StarLess
         protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
                                                      out OptionsValues options)
         {
-            arguments = new ArgumentsValues(Arguments);
-            options = new OptionsValues();
+            var argumentsDictionary = new ArgumentsDictionary();
+            var optionsDictionary = new OptionsDictionary();
 
             int j = 0;
             for (int i = 0; i < args.Length; i++)
@@ -32,7 +32,7 @@ namespace StarLess
                 {
                     Option o = Options[args[i]].Value;
 
-                    var optionArgs = new ArgumentsValues(o.Arguments);
+                    var optionArgs = new ArgumentsDictionary();
                     foreach (Argument argument in o.Arguments)
                     {
                         i++;
@@ -42,13 +42,16 @@ namespace StarLess
 
                         optionArgs.Add(a.Name, args[i]);
                     }
-                    options.Add(o.ShortKey, optionArgs);
+                    optionsDictionary.Add(o.ShortKey, optionArgs);
                     continue;
                 }
 
-                arguments.Add(j.ToString(CultureInfo.InvariantCulture), args[i]);
+                argumentsDictionary.Add(j.ToString(CultureInfo.InvariantCulture), args[i]);
                 j++;
             }
+
+            arguments = new ArgumentsValues(argumentsDictionary);
+            options = new OptionsValues(optionsDictionary);
         }
 
         public override sealed string CompleteDescription()
