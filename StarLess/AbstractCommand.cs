@@ -31,8 +31,7 @@ namespace StarLess
 
         public abstract string CompleteDescription();
 
-        protected abstract void CheckValidity(string[] args, out ArgumentsValues arguments,
-                                              out OptionsValues options);
+        protected abstract void CheckValidity(string[] args, out ArgumentsValues arguments, out OptionsValues options);
 
         protected abstract void Action(ArgumentsValues args, OptionsValues options);
 

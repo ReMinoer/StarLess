@@ -50,8 +50,7 @@ namespace StarLess
                 throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count);
 
             if (argsCount > RequiredArguments.Count + OptionalArguments.Count)
-                throw new NumberOfArgumentsException(argsCount,
-                    RequiredArguments.Count + OptionalArguments.Count);
+                throw new NumberOfArgumentsException(argsCount, RequiredArguments.Count + OptionalArguments.Count);
 
             int j = 0;
             int k = 0;
