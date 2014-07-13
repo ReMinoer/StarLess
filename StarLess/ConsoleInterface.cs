@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using StarLess.Exceptions;
+using StarLess.Interfaces;
 using StarLess.StandardCommands;
 
 namespace StarLess

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using StarLess.Exceptions;
+using StarLess.Interfaces;
 
 namespace StarLess
 {
@@ -61,10 +62,10 @@ namespace StarLess
                     Option o = Options[args[i]].Value;
 
                     var optionArgs = new ArgumentsDictionary();
-                    foreach (Argument argument in o.Arguments)
+                    foreach (var argument in o.Arguments)
                     {
                         i++;
-                        Argument a = argument;
+                        IArgument a = argument;
                         if (!a.IsValid(args[i]))
                             throw new ArgumentNotValidException(a, j);
 
@@ -100,13 +101,13 @@ namespace StarLess
         {
             string description = Keyword;
 
-            foreach (Argument a in RequiredArguments)
+            foreach (IArgument a in RequiredArguments)
                 description += " " + a.Name;
 
             if (OptionalArguments.Any())
             {
                 description += " (";
-                foreach (Argument a in OptionalArguments)
+                foreach (IArgument a in OptionalArguments)
                     description += " " + a.Name;
                 description += " )";
             }
@@ -125,13 +126,13 @@ namespace StarLess
             if (RequiredArguments.Any())
                 description += "\nARGUMENTS :\n";
 
-            foreach (Argument a in RequiredArguments)
+            foreach (IArgument a in RequiredArguments)
                 description += "\t" + a.Name + " : " + a.Description + "\n";
 
             if (OptionalArguments.Any())
                 description += "\nOPTIONAL ARGUMENTS :\n";
 
-            foreach (Argument a in OptionalArguments)
+            foreach (IArgument a in OptionalArguments)
                 description += "\t" + a.Name + " : " + a.Description + "\n";
 
             if (Options.Any())

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StarLess.Interfaces;
 
 namespace StarLess.StandardCommands
 {
@@ -12,7 +13,7 @@ namespace StarLess.StandardCommands
         {
             Commands = commands;
 
-            OptionalArguments.Add(new Argument("command", typeof(string), "name of a command",
+            OptionalArguments.Add(new Argument<string>("command", "name of a command",
                 new Validator(x => Commands.ContainsKey(x), "Unknown command")));
         }
 

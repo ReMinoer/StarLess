@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using StarLess.Interfaces;
 
 namespace StarLess
 {
-    public struct Argument
+    public struct Argument<T> : IArgument
     {
         public string Name { get; private set; }
         public Type Type { get; private set; }
         public string Description { get; private set; }
         public List<Validator> Validators { get; set; }
 
-        public Argument(string name, Type type, string description, params Validator[] validators)
+        public Argument(string name, string description, params Validator[] validators)
             : this()
         {
             Name = name;
-            Type = type;
+            Type = typeof(T);
             Description = description;
 
-            Validators = new List<Validator> {Validator.TryParse(name, type)};
+            Validators = new List<Validator> {Validator.TryParse<T>(name)};
             Validators.AddRange(validators);
         }
 

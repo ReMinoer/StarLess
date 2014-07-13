@@ -1,4 +1,4 @@
-﻿namespace StarLess
+﻿namespace StarLess.Interfaces
 {
     public interface ICommand
     {

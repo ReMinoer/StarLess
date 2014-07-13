@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using StarLess.Interfaces;
 
 namespace StarLess
 {
@@ -37,7 +38,7 @@ namespace StarLess
 
         protected class ArgumentsDictionary : Dictionary<string, string> {}
 
-        public class ArgumentsList : List<Argument> {}
+        public class ArgumentsList : List<IArgument> { }
 
         protected class ArgumentsValues : ReadOnlyDictionary<string, string>
         {

@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Linq;
 using StarLess.Exceptions;
+using StarLess.Interfaces;
 
 namespace StarLess
 {
@@ -14,7 +15,7 @@ namespace StarLess
                 return result;
             }
         }
-        protected Argument Argument;
+        protected IArgument Argument;
 
         protected UnlimitedCommand(string keyword, string description)
             : base(keyword, description) {}
@@ -33,10 +34,10 @@ namespace StarLess
                     Option o = Options[args[i]].Value;
 
                     var optionArgs = new ArgumentsDictionary();
-                    foreach (Argument argument in o.Arguments)
+                    foreach (IArgument argument in o.Arguments)
                     {
                         i++;
-                        Argument a = argument;
+                        IArgument a = argument;
                         if (!a.IsValid(args[i]))
                             throw new ArgumentNotValidException(a, j);
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using StarLess.Interfaces;
 
 namespace StarLess
 {
@@ -8,9 +9,9 @@ namespace StarLess
         public string ShortKey { get; set; }
         public string LongKey { get; set; }
         public string Description { get; set; }
-        public List<Argument> Arguments { get; set; }
+        public List<IArgument> Arguments { get; set; }
 
-        public Option(string shortKey, string longKey, string description, params Argument[] arguments)
+        public Option(string shortKey, string longKey, string description, params IArgument[] arguments)
             : this()
         {
             ShortKey = shortKey;
