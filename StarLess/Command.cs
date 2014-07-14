@@ -71,7 +71,7 @@ namespace StarLess
 
                         optionArgs.Add(a.Name, args[i]);
                     }
-                    optionsDictionary.Add(o.ShortKey, optionArgs);
+                    optionsDictionary.Add(o.Key, new ArgumentsValues(optionArgs));
                     continue;
                 }
 
@@ -116,7 +116,7 @@ namespace StarLess
             {
                 description += " -[";
                 foreach (Option o in Options)
-                    description += " " + o.ShortKey;
+                    description += " " + o.Key.Short;
                 description += " ]";
             }
 
@@ -139,7 +139,7 @@ namespace StarLess
                 description += "\nOPTIONS :\n";
 
             foreach (Option o in Options)
-                description += "\t-" + o.ShortKey + "/--" + o.LongKey + " : " + o.Description + "\n";
+                description += string.Format("\t{0}/{1} : {2}\n", o.Key.ShortFormated, o.Key.LongFormated, o.Description);
 
             return description;
         }

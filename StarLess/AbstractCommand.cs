@@ -6,6 +6,7 @@ using StarLess.Interfaces;
 
 namespace StarLess
 {
+    // TODO : check if option key already exist (add methods)
     public abstract class AbstractCommand : ICommand
     {
         protected internal AbstractCommand(string keyword, string description)
@@ -55,7 +56,7 @@ namespace StarLess
             }
         }
 
-        protected class OptionsDictionary : Dictionary<string, ArgumentsDictionary> {}
+        protected class OptionsDictionary : Dictionary<Option.OptionKeys, ArgumentsValues> { }
 
         public class OptionsList : List<Option>
         {
@@ -70,22 +71,38 @@ namespace StarLess
                     if (key.Length >= 3 && key.ElementAt(1) == '-')
                     {
                         s = key.Substring(2);
-                        if (Exists(o => o.LongKey == s))
-                            return Find(o => o.LongKey == s);
+                        if (Exists(o => o.Key.Long == s))
+                            return Find(o => o.Key.Long == s);
                         return null;
                     }
                     s = key.Substring(1);
-                    if (Exists(o => o.ShortKey == s))
-                        return Find(o => o.ShortKey == s);
+                    if (Exists(o => o.Key.Short == s))
+                        return Find(o => o.Key.Short == s);
+
                     return null;
                 }
             }
         }
 
-        protected class OptionsValues : ReadOnlyDictionary<string, ArgumentsDictionary>
+        protected class OptionsValues : ReadOnlyDictionary<Option.OptionKeys, ArgumentsValues>
         {
-            public OptionsValues(IDictionary<string, ArgumentsDictionary> dictionary)
+            public OptionsValues(IDictionary<Option.OptionKeys, ArgumentsValues> dictionary)
                 : base(dictionary) {}
+
+            public ArgumentsValues this[string key]
+            {
+                get
+                {
+                    if (ContainsKey(key))
+                        return this.First(o => o.Key.IsShortOrLong(key)).Value;
+                    throw new KeyNotFoundException();
+                }
+            }
+
+            public bool ContainsKey(string key)
+            {
+                return this.Any(o => o.Key.IsShortOrLong(key));
+            }
         }
     }
 }
