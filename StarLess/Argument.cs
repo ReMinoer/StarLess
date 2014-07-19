@@ -6,11 +6,6 @@ namespace StarLess
 {
     public struct Argument<T> : IArgument
     {
-        public string Name { get; private set; }
-        public Type Type { get; private set; }
-        public string Description { get; private set; }
-        public List<Validator> Validators { get; set; }
-
         public Argument(string name, string description, params Validator[] validators)
             : this()
         {
@@ -21,6 +16,11 @@ namespace StarLess
             Validators = new List<Validator> {Validator.TryParse<T>(name)};
             Validators.AddRange(validators);
         }
+
+        public string Name { get; private set; }
+        public Type Type { get; private set; }
+        public string Description { get; private set; }
+        public List<Validator> Validators { get; set; }
 
         public bool IsValid(string s)
         {

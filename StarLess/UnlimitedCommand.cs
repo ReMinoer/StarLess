@@ -76,7 +76,11 @@ namespace StarLess
                 description += "\nOPTIONS :\n";
 
             foreach (Option o in Options)
+            {
                 description += string.Format("\t{0}/{1} : {2}\n", o.Key.ShortFormated, o.Key.LongFormated, o.Description);
+                foreach (IArgument a in o.Arguments)
+                    description += string.Format("\t\t({0} : {1})\n", a.Name, a.Description);
+            }
 
             return description;
         }

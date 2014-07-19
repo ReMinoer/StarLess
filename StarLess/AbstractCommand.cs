@@ -39,7 +39,7 @@ namespace StarLess
 
         protected class ArgumentsDictionary : Dictionary<string, string> {}
 
-        public class ArgumentsList : List<IArgument> { }
+        public class ArgumentsList : List<IArgument> {}
 
         protected class ArgumentsValues : ReadOnlyDictionary<string, string>
         {
@@ -56,7 +56,7 @@ namespace StarLess
             }
         }
 
-        protected class OptionsDictionary : Dictionary<Option.OptionKeys, ArgumentsValues> { }
+        protected class OptionsDictionary : Dictionary<Option.OptionKeys, ArgumentsValues> {}
 
         public class OptionsList : List<Option>
         {
@@ -86,9 +86,6 @@ namespace StarLess
 
         protected class OptionsValues : ReadOnlyDictionary<Option.OptionKeys, ArgumentsValues>
         {
-            public OptionsValues(IDictionary<Option.OptionKeys, ArgumentsValues> dictionary)
-                : base(dictionary) {}
-
             public ArgumentsValues this[string key]
             {
                 get
@@ -98,6 +95,9 @@ namespace StarLess
                     throw new KeyNotFoundException();
                 }
             }
+
+            public OptionsValues(IDictionary<Option.OptionKeys, ArgumentsValues> dictionary)
+                : base(dictionary) {}
 
             public bool ContainsKey(string key)
             {

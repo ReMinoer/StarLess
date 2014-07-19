@@ -26,7 +26,8 @@ namespace StarLess
             public string ShortFormated { get { return "-" + Short; } }
             public string LongFormated { get { return "--" + Long; } }
 
-            public OptionKeys(string shortKey, string longKey) : this()
+            public OptionKeys(string shortKey, string longKey)
+                : this()
             {
                 Short = shortKey;
                 Long = longKey;
