@@ -10,7 +10,7 @@ namespace StarLess
         public ArgumentsList RequiredArguments { get; private set; }
         public ArgumentsList OptionalArguments { get; private set; }
 
-        public override sealed ArgumentsList Arguments
+        public sealed override ArgumentsList Arguments
         {
             get
             {
@@ -28,7 +28,7 @@ namespace StarLess
             OptionalArguments = new ArgumentsList();
         }
 
-        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
+        protected sealed override void CheckValidity(string[] args, out ArgumentsValues arguments,
                                                      out OptionsValues options)
         {
             var argumentsDictionary = new ArgumentsDictionary();
@@ -96,7 +96,7 @@ namespace StarLess
             options = new OptionsValues(optionsDictionary);
         }
 
-        public override sealed string CompleteDescription()
+        public sealed override string CompleteDescription()
         {
             string description = Keyword;
 

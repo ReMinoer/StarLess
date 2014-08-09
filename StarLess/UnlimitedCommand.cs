@@ -6,7 +6,7 @@ namespace StarLess
 {
     public abstract class UnlimitedCommand : AbstractCommand
     {
-        public override sealed ArgumentsList Arguments
+        public sealed override ArgumentsList Arguments
         {
             get
             {
@@ -19,7 +19,7 @@ namespace StarLess
         protected UnlimitedCommand(string keyword, string description)
             : base(keyword, description) {}
 
-        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
+        protected sealed override void CheckValidity(string[] args, out ArgumentsValues arguments,
                                                      out OptionsValues options)
         {
             var argumentsDictionary = new ArgumentsDictionary();
@@ -54,7 +54,7 @@ namespace StarLess
             options = new OptionsValues(optionsDictionary);
         }
 
-        public override sealed string CompleteDescription()
+        public sealed override string CompleteDescription()
         {
             string description = Keyword;
 
