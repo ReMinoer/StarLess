@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using StarLess.Interfaces;
 
 namespace StarLess.StandardCommands
 {

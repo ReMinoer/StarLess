@@ -1,6 +1,4 @@
-﻿using StarLess.Interfaces;
-
-namespace StarLess.Exceptions
+﻿namespace StarLess.Exceptions
 {
     internal class ArgumentNotValidException : ConsoleInterfaceException
     {

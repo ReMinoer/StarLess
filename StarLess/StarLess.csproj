@@ -42,8 +42,8 @@
     <Compile Include="Exceptions\ConsoleInterfaceException.cs" />
     <Compile Include="Exceptions\NumberOfArgumentsException.cs" />
     <Compile Include="Exceptions\UnknownCommandException.cs" />
-    <Compile Include="Interfaces\IArgument.cs" />
-    <Compile Include="Interfaces\ICommand.cs" />
+    <Compile Include="IArgument.cs" />
+    <Compile Include="ICommand.cs" />
     <Compile Include="StandardCommands\ExitCommand.cs" />
     <Compile Include="StandardCommands\HelpCommand.cs" />
     <Compile Include="Option.cs" />

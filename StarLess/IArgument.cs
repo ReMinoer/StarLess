@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace StarLess.Interfaces
+namespace StarLess
 {
     public interface IArgument
     {
