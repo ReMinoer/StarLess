@@ -12,7 +12,10 @@ namespace StarLess
             Type = typeof(T);
             Description = description;
 
-            Validators = new List<Validator> {Validator.TryParse<T>(name)};
+            Validators = new List<Validator>
+            {
+                Validator.TryParse<T>(name)
+            };
             Validators.AddRange(validators);
         }
 

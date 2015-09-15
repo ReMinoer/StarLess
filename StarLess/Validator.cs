@@ -75,7 +75,7 @@ namespace StarLess
         }
 
         static public Validator ValueRange<T>(string name, T min, T max, bool minExclude = false,
-                                              bool maxExclude = false) where T : IComparable<T>
+            bool maxExclude = false) where T : IComparable<T>
         {
             var v = new Validator
             {

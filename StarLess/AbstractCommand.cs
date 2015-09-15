@@ -8,17 +8,17 @@ namespace StarLess
     // TODO : check if option key already exist (add methods)
     public abstract class AbstractCommand : ICommand
     {
-        protected internal AbstractCommand(string keyword, string description)
+        public string Keyword { get; private set; }
+        public string Description { get; private set; }
+        public OptionsList Options { get; private set; }
+        public abstract ArgumentsList Arguments { get; }
+
+        internal protected AbstractCommand(string keyword, string description)
         {
             Keyword = keyword;
             Description = description;
             Options = new OptionsList();
         }
-
-        public string Keyword { get; private set; }
-        public string Description { get; private set; }
-        public abstract ArgumentsList Arguments { get; }
-        public OptionsList Options { get; private set; }
 
         public void Run(params string[] args)
         {
@@ -36,14 +36,20 @@ namespace StarLess
 
         protected abstract void Action(ArgumentsValues args, OptionsValues options);
 
-        protected class ArgumentsDictionary : Dictionary<string, string> {}
+        protected class ArgumentsDictionary : Dictionary<string, string>
+        {
+        }
 
-        public class ArgumentsList : List<IArgument> {}
+        public class ArgumentsList : List<IArgument>
+        {
+        }
 
         protected class ArgumentsValues : ReadOnlyDictionary<string, string>
         {
             public ArgumentsValues(IDictionary<string, string> dictionary)
-                : base(dictionary) {}
+                : base(dictionary)
+            {
+            }
 
             public T Value<T>(string parameterName)
             {
@@ -55,7 +61,9 @@ namespace StarLess
             }
         }
 
-        protected class OptionsDictionary : Dictionary<Option.OptionKeys, ArgumentsValues> {}
+        protected class OptionsDictionary : Dictionary<Option.OptionKeys, ArgumentsValues>
+        {
+        }
 
         public class OptionsList : List<Option>
         {
@@ -85,6 +93,11 @@ namespace StarLess
 
         protected class OptionsValues : ReadOnlyDictionary<Option.OptionKeys, ArgumentsValues>
         {
+            public OptionsValues(IDictionary<Option.OptionKeys, ArgumentsValues> dictionary)
+                : base(dictionary)
+            {
+            }
+
             public ArgumentsValues this[string key]
             {
                 get
@@ -94,9 +107,6 @@ namespace StarLess
                     throw new KeyNotFoundException();
                 }
             }
-
-            public OptionsValues(IDictionary<Option.OptionKeys, ArgumentsValues> dictionary)
-                : base(dictionary) {}
 
             public bool ContainsKey(string key)
             {

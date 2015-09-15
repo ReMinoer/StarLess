@@ -10,7 +10,7 @@ namespace StarLess
         public ArgumentsList RequiredArguments { get; private set; }
         public ArgumentsList OptionalArguments { get; private set; }
 
-        public sealed override ArgumentsList Arguments
+        public override sealed ArgumentsList Arguments
         {
             get
             {
@@ -28,8 +28,59 @@ namespace StarLess
             OptionalArguments = new ArgumentsList();
         }
 
-        protected sealed override void CheckValidity(string[] args, out ArgumentsValues arguments,
-                                                     out OptionsValues options)
+        public override sealed string CompleteDescription()
+        {
+            string description = Keyword;
+
+            foreach (IArgument a in RequiredArguments)
+                description += " " + a.Name;
+
+            if (OptionalArguments.Any())
+            {
+                description += " (";
+                foreach (IArgument a in OptionalArguments)
+                    description += " " + a.Name;
+                description += " )";
+            }
+
+            if (Options.Any())
+            {
+                description += " -[";
+                foreach (Option o in Options)
+                    description += " " + o.Key.Short;
+                description += " ]";
+            }
+
+            description += "\n\nDESCRIPTION : \n";
+            description += "\t" + Description + "\n";
+
+            if (RequiredArguments.Any())
+                description += "\nARGUMENTS :\n";
+
+            foreach (IArgument a in RequiredArguments)
+                description += "\t" + a.Name + " : " + a.Description + "\n";
+
+            if (OptionalArguments.Any())
+                description += "\nOPTIONAL ARGUMENTS :\n";
+
+            foreach (IArgument a in OptionalArguments)
+                description += "\t" + a.Name + " : " + a.Description + "\n";
+
+            if (Options.Any())
+                description += "\nOPTIONS :\n";
+
+            foreach (Option o in Options)
+            {
+                description += string.Format("\t{0}/{1} : {2}\n", o.Key.ShortFormated, o.Key.LongFormated, o.Description);
+                foreach (IArgument a in o.Arguments)
+                    description += string.Format("\t\t({0} : {1})\n", a.Name, a.Description);
+            }
+
+            return description;
+        }
+
+        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
+            out OptionsValues options)
         {
             var argumentsDictionary = new ArgumentsDictionary();
             var optionsDictionary = new OptionsDictionary();
@@ -94,57 +145,6 @@ namespace StarLess
 
             arguments = new ArgumentsValues(argumentsDictionary);
             options = new OptionsValues(optionsDictionary);
-        }
-
-        public sealed override string CompleteDescription()
-        {
-            string description = Keyword;
-
-            foreach (IArgument a in RequiredArguments)
-                description += " " + a.Name;
-
-            if (OptionalArguments.Any())
-            {
-                description += " (";
-                foreach (IArgument a in OptionalArguments)
-                    description += " " + a.Name;
-                description += " )";
-            }
-
-            if (Options.Any())
-            {
-                description += " -[";
-                foreach (Option o in Options)
-                    description += " " + o.Key.Short;
-                description += " ]";
-            }
-
-            description += "\n\nDESCRIPTION : \n";
-            description += "\t" + Description + "\n";
-
-            if (RequiredArguments.Any())
-                description += "\nARGUMENTS :\n";
-
-            foreach (IArgument a in RequiredArguments)
-                description += "\t" + a.Name + " : " + a.Description + "\n";
-
-            if (OptionalArguments.Any())
-                description += "\nOPTIONAL ARGUMENTS :\n";
-
-            foreach (IArgument a in OptionalArguments)
-                description += "\t" + a.Name + " : " + a.Description + "\n";
-
-            if (Options.Any())
-                description += "\nOPTIONS :\n";
-
-            foreach (Option o in Options)
-            {
-                description += string.Format("\t{0}/{1} : {2}\n", o.Key.ShortFormated, o.Key.LongFormated, o.Description);
-                foreach (IArgument a in o.Arguments)
-                    description += string.Format("\t\t({0} : {1})\n", a.Name, a.Description);
-            }
-
-            return description;
         }
     }
 }

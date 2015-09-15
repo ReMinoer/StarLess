@@ -24,6 +24,8 @@
         }
 
         public Request(string line)
-            : this(line.Split(new[] {' '})) {}
+            : this(line.Split(' '))
+        {
+        }
     }
 }

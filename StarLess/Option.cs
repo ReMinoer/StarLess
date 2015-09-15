@@ -12,7 +12,11 @@ namespace StarLess
         public Option(string shortKey, string longKey, string description, params IArgument[] arguments)
             : this()
         {
-            Key = new OptionKeys {Long = longKey, Short = shortKey};
+            Key = new OptionKeys
+            {
+                Long = longKey,
+                Short = shortKey
+            };
             Description = description;
             Arguments = arguments.ToList();
         }
@@ -22,8 +26,15 @@ namespace StarLess
             public string Short { get; set; }
             public string Long { get; set; }
 
-            public string ShortFormated { get { return "-" + Short; } }
-            public string LongFormated { get { return "--" + Long; } }
+            public string ShortFormated
+            {
+                get { return "-" + Short; }
+            }
+
+            public string LongFormated
+            {
+                get { return "--" + Long; }
+            }
 
             public OptionKeys(string shortKey, string longKey)
                 : this()

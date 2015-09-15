@@ -6,21 +6,56 @@ namespace StarLess
 {
     public abstract class UnlimitedCommand : AbstractCommand
     {
-        public sealed override ArgumentsList Arguments
+        protected IArgument Argument;
+
+        public override sealed ArgumentsList Arguments
         {
             get
             {
-                var result = new ArgumentsList {Argument};
+                var result = new ArgumentsList
+                {
+                    Argument
+                };
                 return result;
             }
         }
-        protected IArgument Argument;
 
         protected UnlimitedCommand(string keyword, string description)
-            : base(keyword, description) {}
+            : base(keyword, description)
+        {
+        }
 
-        protected sealed override void CheckValidity(string[] args, out ArgumentsValues arguments,
-                                                     out OptionsValues options)
+        public override sealed string CompleteDescription()
+        {
+            string description = Keyword;
+
+            description += " " + Argument.Name + "...";
+
+            if (Options.Any())
+            {
+                description += " -[";
+                description = Options.Aggregate(description, (current, o) => current + (" " + o.Key.Short));
+                description += " ]";
+            }
+
+            description += "\n\nDESCRIPTION : \n";
+            description += "\t" + Description + "\n";
+
+            if (Options.Any())
+                description += "\nOPTIONS :\n";
+
+            foreach (Option o in Options)
+            {
+                description += string.Format("\t{0}/{1} : {2}\n", o.Key.ShortFormated, o.Key.LongFormated, o.Description);
+                foreach (IArgument a in o.Arguments)
+                    description += string.Format("\t\t({0} : {1})\n", a.Name, a.Description);
+            }
+
+            return description;
+        }
+
+        protected override sealed void CheckValidity(string[] args, out ArgumentsValues arguments,
+            out OptionsValues options)
         {
             var argumentsDictionary = new ArgumentsDictionary();
             var optionsDictionary = new OptionsDictionary();
@@ -52,36 +87,6 @@ namespace StarLess
 
             arguments = new ArgumentsValues(argumentsDictionary);
             options = new OptionsValues(optionsDictionary);
-        }
-
-        public sealed override string CompleteDescription()
-        {
-            string description = Keyword;
-
-            description += " " + Argument.Name + "...";
-
-            if (Options.Any())
-            {
-                description += " -[";
-                foreach (Option o in Options)
-                    description += " " + o.Key.Short;
-                description += " ]";
-            }
-
-            description += "\n\nDESCRIPTION : \n";
-            description += "\t" + Description + "\n";
-
-            if (Options.Any())
-                description += "\nOPTIONS :\n";
-
-            foreach (Option o in Options)
-            {
-                description += string.Format("\t{0}/{1} : {2}\n", o.Key.ShortFormated, o.Key.LongFormated, o.Description);
-                foreach (IArgument a in o.Arguments)
-                    description += string.Format("\t\t({0} : {1})\n", a.Name, a.Description);
-            }
-
-            return description;
         }
     }
 }
